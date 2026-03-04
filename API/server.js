@@ -6,8 +6,10 @@ const path = require('path');
 const fs = require('fs');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const cors = require('cors');
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 // === Configuração do banco de dados ===
@@ -16,7 +18,7 @@ const db = mysql.createConnection({
   user: 'root',
   password: 'root',
   database: 'banco_tcc',
-  port: 3306
+  port: 3307
 });
 
 db.connect(err => {
