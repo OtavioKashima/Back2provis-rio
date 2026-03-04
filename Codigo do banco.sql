@@ -15,29 +15,18 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- -----------------------------------------------------
--- Schema banco_tcc
--- -----------------------------------------------------
+--
+-- Table structure for table `comentarios`
+--
 
--- -----------------------------------------------------
--- Schema banco_tcc
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `banco_tcc` DEFAULT CHARACTER SET utf8 ;
-USE `banco_tcc` ;
-
--- -----------------------------------------------------
--- Table `banco_tcc`.`usuarios`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `banco_tcc`.`usuarios` ;
-
-CREATE TABLE IF NOT EXISTS `banco_tcc`.`usuarios` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `nome` VARCHAR(200) NOT NULL,
-  `cpf` VARCHAR(11) NOT NULL,
-  `email` VARCHAR(200) NULL,
-  `telefone` VARCHAR(200) NULL,
-  `senha` VARCHAR(200) NOT NULL,
-  `foto_perfil` VARCHAR(200) NULL,
+DROP TABLE IF EXISTS `comentarios`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `comentarios` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `comentario` text NOT NULL,
+  `usuarios_id` int NOT NULL,
+  `postagens_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_comentarios_usuarios1_idx` (`usuarios_id`),
   KEY `fk_comentarios_postagens1_idx` (`postagens_id`),
@@ -80,7 +69,7 @@ DROP TABLE IF EXISTS `usuarios`;
 CREATE TABLE `usuarios` (
   `id` int NOT NULL AUTO_INCREMENT,
   `nome` varchar(200) NOT NULL,
-  `cpf` varchar(11) NOT NULL,
+  `cpf` varchar(14) NOT NULL,
   `email` varchar(200) DEFAULT NULL,
   `telefone` varchar(200) DEFAULT NULL,
   `senha` varchar(200) NOT NULL,
