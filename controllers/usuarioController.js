@@ -106,7 +106,7 @@ exports.atualizar = (req, res) => {
   });
 };
 
-// DELETAR USUÁRIO (Delete)
+// DELETAR USUÁRIO (Delete) por token
 exports.deletar = (req, res) => {
   // Pegamos o ID do token
   const usuarioId = req.usuarioId; 
