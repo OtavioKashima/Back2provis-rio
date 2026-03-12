@@ -14,6 +14,11 @@ router.post('/usuarios', upload.single('foto_perfil'), usuarioController.cadastr
 
 router.post('/login', usuarioController.login);
 
+router.put('/perfil', autenticar, usuarioController.atualizar);
+
+// Rota para Deletar o usuário logado
+router.delete('/perfil', autenticar, usuarioController.deletar);
+
 router.get('/perfil', autenticar, (req, res)=>{
   res.json({
     mensagem: "Rota protegida funcionando",

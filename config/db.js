@@ -4,7 +4,7 @@ const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: 'root',
-  database: 'tcc_banco',
+  database: 'banco_tcc',
   port: 3307
 });
 

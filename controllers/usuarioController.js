@@ -80,3 +80,45 @@ exports.login = (req, res) => {
   );
 
 };
+
+// ATUALIZAR USUÁRIO (Update)
+exports.atualizar = (req, res) => {
+  // Pegamos os dados que o usuário quer mudar
+  const { nome, email, telefone } = req.body;
+  
+  // Pegamos o ID diretamente do token (segurança máxima!)
+  const usuarioId = req.usuarioId; 
+
+  // Validação básica
+  if (!nome || !email) {
+    return res.status(400).json({ erro: 'Nome e email são obrigatórios para atualizar.' });
+  }
+
+  const query = 'UPDATE usuarios SET nome = ?, email = ?, telefone = ? WHERE id = ?';
+  
+  db.query(query, [nome, email, telefone, usuarioId], (err, result) => {
+    if (err) {
+      console.error("Erro ao atualizar:", err);
+      return res.status(500).json({ erro: 'Erro ao atualizar o perfil.' });
+    }
+
+    res.json({ mensagem: 'Perfil atualizado com sucesso!' });
+  });
+};
+
+// DELETAR USUÁRIO (Delete)
+exports.deletar = (req, res) => {
+  // Pegamos o ID do token
+  const usuarioId = req.usuarioId; 
+
+  const query = 'DELETE FROM usuarios WHERE id = ?';
+
+  db.query(query, [usuarioId], (err, result) => {
+    if (err) {
+      console.error("Erro ao deletar:", err);
+      return res.status(500).json({ erro: 'Erro ao deletar a conta.' });
+    }
+
+    res.json({ mensagem: 'Conta deletada com sucesso!' });
+  });
+};

@@ -8,4 +8,6 @@ const autenticar = require('../middleware/authMiddleware');
 // Rota POST protegida pelo token
 router.post('/postagens', autenticar, postagemController.criarPostagem);
 
+router.get('/postagens', postagemController.listarPostagens);
+
 module.exports = router;
