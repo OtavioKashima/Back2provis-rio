@@ -48,7 +48,7 @@ CREATE TABLE `postagens` (
   `titulo` varchar(150) NOT NULL,
   `descricao` text NOT NULL,
   `raca` varchar(150) DEFAULT NULL,
-  `genero` enum('feminino','masculino','desconhecido') DEFAULT NULL,
+  `genero` enum('femea', 'macho','dois') DEFAULT NULL,
   `idade` int DEFAULT NULL,
   `foto` varchar(200) DEFAULT NULL,
   `data_criacao` date NOT NULL,
