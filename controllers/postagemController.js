@@ -21,7 +21,7 @@ exports.criarPostagem = (req, res) => {
   }
 
   // 2. Validação do ENUM do tipo_postagem
-  const tiposValidos = ['denuncia', 'doação', 'adoção'];
+  const tiposValidos = ['denuncia', 'doacao', 'adocao'];
   if (!tiposValidos.includes(tipo_postagem.toLowerCase())) {
     return res.status(400).json({ erro: 'Tipo de postagem inválido.' });
   }
@@ -114,18 +114,25 @@ exports.deletarPostagem = (req, res) => {
   });
 };
 
-exports.listarPostagens = (req, res) => {
-  const query = 'SELECT * FROM postagens';
+// LISTAR POSTAGENS POR TIPO
+exports.listarPorTipo = (req, res) => {
+  // Pega o tipo da URL (ex: adocao, doacao, denuncia)
+  const tipo = req.params.tipo; 
 
-  db.query(query, (err, results) => {
+  // Busca no banco apenas as postagens daquele tipo e ordena das mais novas para as mais velhas
+  const query = 'SELECT * FROM postagens WHERE tipo_postagem = ? ORDER BY data_criacao DESC';
+
+  db.query(query, [tipo], (err, results) => {
     if (err) {
-      console.error("Erro ao listar postagens:", err);
-      return res.status(500).json({ erro: 'Erro interno ao listar postagens.' });
+      console.error("Erro ao listar postagens por tipo:", err);
+      return res.status(500).json({ erro: 'Erro interno ao buscar postagens.' });
     }
-    else if (results.length === 0) {
-      return res.json({ mensagem: 'Nenhuma postagem encontrada.' });
+    
+    // Se não tiver nenhuma postagem desse tipo, podemos devolver um array vazio
+    if (results.length === 0) {
+      return res.json([]); 
     }
 
     res.json(results);
   });
-}
+};

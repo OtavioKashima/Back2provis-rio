@@ -44,7 +44,7 @@ DROP TABLE IF EXISTS `postagens`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `postagens` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `tipo_postagem` enum('denuncia','doação','adoção') NOT NULL,
+  `tipo_postagem` enum('denuncia','doacao','adocao') NOT NULL,
   `titulo` varchar(150) NOT NULL,
   `descricao` text NOT NULL,
   `raca` varchar(150) DEFAULT NULL,

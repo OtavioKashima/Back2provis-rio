@@ -15,7 +15,9 @@ router.put('/postagens/:id', autenticar, postagemController.atualizarPostagem);
 // Rota para deletar (DELETE)
 router.delete('/postagens/:id', autenticar, postagemController.deletarPostagem);
 
-router.get('/postagens', autenticar, postagemController.listarPostagens);
+// Rota para buscar postagens por tipo específico
+// O ":tipo" vai receber valores como "adoção", "doação" ou "denuncia"
+router.get('/postagens/tipo/:tipo_postagem', postagemController.listarPorTipo);
 
 
 module.exports = router;
