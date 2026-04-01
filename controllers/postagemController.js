@@ -8,12 +8,16 @@ exports.criarPostagem = (req, res) => {
     descricao,
     raca,
     genero,
-    idade,
-    foto // Se for enviar apenas o nome/URL do arquivo por enquanto
+    idade // Se for enviar apenas o nome/URL do arquivo por enquanto
   } = req.body;
 
   // O ID do usuário vem do token (middleware de autenticação)
   const usuarios_id = req.usuarioId;
+
+  let foto = null;
+  if (req.file) {
+    foto = req.file.filename; // Salvaremos apenas o nome do arquivo no banco (ex: 167890-gato.jpg)
+  }
 
   // 1. Validação de campos obrigatórios (conforme seu banco de dados)
   if (!tipo_postagem || !titulo || !descricao) {
@@ -116,10 +120,8 @@ exports.deletarPostagem = (req, res) => {
 
 // LISTAR POSTAGENS POR TIPO
 exports.listarPorTipo = (req, res) => {
-  // Pega o tipo da URL (ex: adocao, doacao, denuncia)
-  const tipo = req.params.tipo; 
+  const tipo = req.params.tipo;
 
-  // Busca no banco apenas as postagens daquele tipo e ordena das mais novas para as mais velhas
   const query = 'SELECT * FROM postagens WHERE tipo_postagem = ? ORDER BY data_criacao DESC';
 
   db.query(query, [tipo], (err, results) => {
@@ -127,10 +129,8 @@ exports.listarPorTipo = (req, res) => {
       console.error("Erro ao listar postagens por tipo:", err);
       return res.status(500).json({ erro: 'Erro interno ao buscar postagens.' });
     }
-    
-    // Se não tiver nenhuma postagem desse tipo, podemos devolver um array vazio
     if (results.length === 0) {
-      return res.json([]); 
+      return res.json([]);
     }
 
     res.json(results);
