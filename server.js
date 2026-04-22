@@ -17,6 +17,9 @@ app.use(express.json());
 app.use('/api', usuarioRoutes);
 app.use('/api', postagemRoutes); // 👈 Adicionando as rotas de postagem na base /api
 
+// O express.static cria uma "ponte pública" para a sua pasta uploads
+app.use('/uploads', express.static('uploads'));
+
 app.use(errorHandler);
 
 const PORT = 3000;
