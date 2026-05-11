@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `banco_tcc`.`usuarios` (
   `telefone` VARCHAR(200) NULL DEFAULT NULL,
   `senha` VARCHAR(200) NOT NULL,
   `foto_perfil` VARCHAR(200) NULL DEFAULT NULL,
-  `admin` TINYINT NOT NULL,
+  `admin` TINYINT(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE INDEX `cpf_UNIQUE` (`cpf` ASC) VISIBLE)
 ENGINE = InnoDB

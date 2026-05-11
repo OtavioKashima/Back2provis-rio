@@ -19,7 +19,7 @@ router.put('/perfil', autenticar, usuarioController.atualizar);
 // Rota para Deletar o usuário logado
 router.delete('/perfil', autenticar, usuarioController.deletar);
 
-router.post('/admin', usuarioController)
+// router.post('/admin', usuarioController)
 
 router.get('/perfil', autenticar, (req, res)=>{
   res.json({
