@@ -4,6 +4,29 @@ const jwt = require('jsonwebtoken');
 
 const SALT_ROUNDS = 10;
 
+exports.perfil = (req, res) => {
+  // O middleware de autenticação já colocou o ID do usuário logado aqui!
+  const usuarioId = req.usuarioId; 
+
+  // Buscamos apenas os dados necessários (NUNCA retorne a senha!)
+  const query = 'SELECT id, nome, telefone, foto_perfil FROM usuarios WHERE id = ?';
+
+  db.query(query, [usuarioId], (err, results) => {
+    if (err) {
+      console.error("Erro ao buscar perfil:", err);
+      return res.status(500).json({ erro: 'Erro interno ao buscar dados do usuário.' });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ erro: 'Usuário não encontrado.' });
+    }
+
+    // Como o ID é único, o MySQL devolve um array com 1 item. 
+    // Nós enviamos apenas esse item (results[0]) para o Angular.
+    res.status(200).json(results[0]); 
+  });
+};
+
 exports.cadastrar = async (req, res) => {
 
   const { nome, cpf, email, telefone, senha } = req.body;

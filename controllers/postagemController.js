@@ -136,3 +136,22 @@ exports.listarPorTipo = (req, res) => {
     res.json(results);
   });
 };
+
+// No final do arquivo postagemController.js
+exports.PostagensPerfil = (req, res) => {
+  const usuarioId = req.usuarioId;
+
+  // Busca todas as postagens onde a coluna usuarios_id for igual ao ID do token
+  // O "ORDER BY id DESC" faz a postagem mais nova aparecer primeiro na lista
+  const query = 'SELECT * FROM postagens WHERE usuarios_id = ? ORDER BY id DESC';
+
+  db.query(query, [usuarioId], (err, results) => {
+    if (err) {
+      console.error("Erro ao buscar minhas postagens:", err);
+      return res.status(500).json({ erro: 'Erro interno ao buscar postagens.' });
+    }
+
+    // Envia a lista inteira para o Angular (pode ser uma lista vazia se ele não postou nada ainda)
+    res.status(200).json(results);
+  });
+};

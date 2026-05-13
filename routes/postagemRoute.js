@@ -32,5 +32,7 @@ router.delete('/postagens/:id', autenticar, postagemController.deletarPostagem);
 // O ":tipo" vai receber valores como "adoção", "doação" ou "denuncia"
 router.get('/postagens/tipo/:tipo', postagemController.listarPorTipo);
 
+router.get('/postperfil', autenticar, postagemController.PostagensPerfil);
+
 
 module.exports = router;
