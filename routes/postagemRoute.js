@@ -4,17 +4,25 @@ const router = express.Router();
 // Importa o controller e o middleware
 const postagemController = require('../controllers/postagemController');
 const autenticar = require('../middleware/authMiddleware');
-const multer = require('multer'); // 👈 1. Importa o Multer
+const multer = require('multer');
+const path = require('path');
 
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, 'uploads/'); // A pasta que você acabou de criar
-    },
-    filename: function (req, file, cb) {
-      // Renomeia o arquivo com a data para não ter nomes duplicados
-      cb(null, Date.now() + '-' + file.originalname.replace(/\s/g, '_')); 
-    }
-  });
+  // 1. Onde salvar
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/'); 
+  },
+  // 2. Qual nome dar ao arquivo
+  filename: function (req, file, cb) {
+    // Extrai a extensão do arquivo original (ex: .jpg, .png)
+    const extensao = path.extname(file.originalname);
+    
+    // Cria um nome único com a data atual + um número aleatório + a extensão
+    const nomeUnico = Date.now() + '-' + Math.round(Math.random() * 1E9) + extensao;
+    
+    cb(null, nomeUnico);
+  }
+});
   
   const upload = multer({ storage: storage });
 

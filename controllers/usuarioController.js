@@ -6,7 +6,7 @@ const SALT_ROUNDS = 10;
 
 exports.perfil = (req, res) => {
   // O middleware de autenticação já colocou o ID do usuário logado aqui!
-  const usuarioId = req.usuarioId; 
+  const usuarioId = req.usuarioId;
 
   // Buscamos apenas os dados necessários (NUNCA retorne a senha!)
   const query = 'SELECT id, nome, telefone, foto_perfil FROM usuarios WHERE id = ?';
@@ -23,7 +23,7 @@ exports.perfil = (req, res) => {
 
     // Como o ID é único, o MySQL devolve um array com 1 item. 
     // Nós enviamos apenas esse item (results[0]) para o Angular.
-    res.status(200).json(results[0]); 
+    res.status(200).json(results[0]);
   });
 };
 
@@ -106,27 +106,46 @@ exports.login = (req, res) => {
 
 // ATUALIZAR USUÁRIO (Update)
 exports.atualizar = (req, res) => {
-  // Pegamos os dados que o usuário quer mudar
-  const { nome, email, telefone } = req.body;
+  const usuarioId = req.usuarioId; // ID que vem do Token JWT
+  const { nome, telefone } = req.body; // Dados de texto
 
-  // Pegamos o ID diretamente do token (segurança máxima!)
-  const usuarioId = req.usuarioId;
+  // 1. Verificamos se uma NOVA foto foi enviada
+  if (req.file) {
+    // 🔴 AQUI ESTÁ A CHAVE: req.file.filename é o nome que está na pasta uploads!
+    const nomeArquivoNovo = req.file.filename; 
+    console.log("Nova foto detectada e salva como:", nomeArquivoNovo);
 
-  // Validação básica
-  if (!nome || !email) {
-    return res.status(400).json({ erro: 'Nome e email são obrigatórios para atualizar.' });
+    const query = 'UPDATE usuarios SET nome = ?, telefone = ?, foto_perfil = ? WHERE id = ?';
+    
+    db.query(query, [nome, telefone, nomeArquivoNovo, usuarioId], (err, results) => {
+      if (err) {
+        console.error("Erro SQL ao atualizar com foto:", err);
+        return res.status(500).json({ erro: 'Erro interno ao atualizar perfil com foto.' });
+      }
+      
+      console.log("Banco de dados atualizado com sucesso (Nome + Foto).");
+      res.status(200).json({ 
+        mensagem: 'Perfil e foto atualizados!', 
+        foto: nomeArquivoNovo 
+      });
+    });
+
+  } else {
+    // 2. Caso o usuário mude apenas o nome ou telefone (sem trocar a foto)
+    console.log("Nenhuma foto nova enviada. Atualizando apenas textos...");
+
+    const query = 'UPDATE usuarios SET nome = ?, telefone = ? WHERE id = ?';
+    
+    db.query(query, [nome, telefone, usuarioId], (err, results) => {
+      if (err) {
+        console.error("Erro SQL ao atualizar textos:", err);
+        return res.status(500).json({ erro: 'Erro interno ao atualizar perfil.' });
+      }
+
+      console.log("Banco de dados atualizado com sucesso (Apenas textos).");
+      res.status(200).json({ mensagem: 'Dados atualizados com sucesso!' });
+    });
   }
-
-  const query = 'UPDATE usuarios SET nome = ?, email = ?, telefone = ? WHERE id = ?';
-
-  db.query(query, [nome, email, telefone, usuarioId], (err, result) => {
-    if (err) {
-      console.error("Erro ao atualizar:", err);
-      return res.status(500).json({ erro: 'Erro ao atualizar o perfil.' });
-    }
-
-    res.json({ mensagem: 'Perfil atualizado com sucesso!' });
-  });
 };
 
 // DELETAR USUÁRIO (Delete) por token

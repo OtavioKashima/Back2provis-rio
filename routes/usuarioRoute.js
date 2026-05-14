@@ -14,10 +14,10 @@ router.post('/usuarios', upload.single('foto_perfil'), usuarioController.cadastr
 
 router.post('/login', usuarioController.login);
 
-router.put('/perfil', autenticar, usuarioController.atualizar);
+router.put('/perfiledit', autenticar, upload.single('foto'), usuarioController.atualizar);
 
 // Rota para Deletar o usuário logado
-router.delete('/perfil', autenticar, usuarioController.deletar);
+router.delete('/perfildelete', autenticar, usuarioController.deletar);
 
 router.get('/perfil', autenticar, usuarioController.perfil);
 
