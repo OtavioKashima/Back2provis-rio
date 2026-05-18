@@ -1,31 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
-// Importa o controller e o middleware
 const postagemController = require('../controllers/postagemController');
-const autenticar = require('../middleware/authMiddleware');
-const multer = require('multer');
-const path = require('path');
+const autenticar = require('../middleware/authMiddleware'); 
 
-const storage = multer.diskStorage({
-  // 1. Onde salvar
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/'); 
-  },
-  // 2. Qual nome dar ao arquivo
-  filename: function (req, file, cb) {
-    // Extrai a extensão do arquivo original (ex: .jpg, .png)
-    const extensao = path.extname(file.originalname);
-    
-    // Cria um nome único com a data atual + um número aleatório + a extensão
-    const nomeUnico = Date.now() + '-' + Math.round(Math.random() * 1E9) + extensao;
-    
-    cb(null, nomeUnico);
-  }
-});
-  
-  const upload = multer({ storage: storage });
-
+const upload = require('../middleware/configMulter');
 // Rota POST protegida pelo token
 router.post('/postagens', autenticar, upload.single('foto'), postagemController.criarPostagem);
 

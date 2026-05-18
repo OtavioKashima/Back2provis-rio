@@ -1,12 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const multer = require('multer'); // 👈 Importe o Multer
-
-const usuarioController = require('../controllers/usuarioController');
-const autenticar = require('../middleware/authMiddleware');
-
-// 👈 Configure onde as fotos serão salvas temporariamente
-const upload = multer({ dest: 'uploads/' }); 
+const usuarioController = require('../controllers/usuarioController'); 
+const autenticar = require('../middleware/authMiddleware'); 
+const upload = require('../middleware/configMulter');
 
 // 👈 Adicione o upload.single('foto_perfil') antes do controller
 // 'foto_perfil' é exatamente o nome que você usou no formData.append do Ionic
